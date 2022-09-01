@@ -2,8 +2,9 @@ package app
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
+
+	"github.banking/sardarmd/app/service"
 )
 
 type Customer struct {
@@ -11,18 +12,13 @@ type Customer struct {
 	City string `json:"city"`
 }
 
-func greet(w http.ResponseWriter, r *http.Request) {
-
-	fmt.Fprint(w, "Hi Good Morning")
+type CustomerHandler struct {
+	service service.CustomerService
 }
 
-func getAllCustomer(w http.ResponseWriter, r *http.Request) {
-	customers := []Customer{{"Sardar", "Bangalore"}, {"Sadia", "Kanpur"}}
+func (ch *CustomerHandler) getAllCustomer(w http.ResponseWriter, r *http.Request) {
+	customers, _ := ch.service.GetAllCustomer()
 	w.Header().Add("Content-type", "application/json")
 	json.NewEncoder(w).Encode(customers)
 
-}
-
-func createCustomer(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprint(w, "Post method received")
 }

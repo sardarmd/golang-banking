@@ -4,16 +4,17 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.banking/sardarmd/app/domain"
+	"github.banking/sardarmd/app/service"
 	"github.com/gorilla/mux"
 )
 
 func Start() {
 	fmt.Printf("Starting new server")
-
+	//wiring
+	ch := CustomerHandler{service.NewCustomerService(domain.NewCustomerRespositoryStub())}
 	router := mux.NewRouter()
-	router.HandleFunc("/greet", greet).Methods(http.MethodGet)
-	router.HandleFunc("/getcustomers", getAllCustomer).Methods(http.MethodGet)
-	router.HandleFunc("/createcustomer", createCustomer).Methods(http.MethodPost)
+	router.HandleFunc("/getcustomers", ch.getAllCustomer).Methods(http.MethodGet)
 
 	http.ListenAndServe("localhost:8080", router)
 }
